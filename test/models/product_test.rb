@@ -33,4 +33,15 @@ class ProductTest < ActiveSupport::TestCase
     assert product.valid?
   end
   
+  test "product image url must end with valid extension" do
+    ok = %w{ fred.gif fred.jpg fred.png FRED.JPG FRED.Jpg http://a.b.c/x/y/z/fred.gif }
+    bad = %w{ fred.doc fred.gif/more fred.gif.more }
+    ok.each do |extension|
+      assert Product.new(title: "My title", description: "My description", image_url: extension, price: 10).valid?, "#{extension} should be valid"
+    end
+    bad.each do |extension|
+      assert Product.new(title: "My title", description: "My description", image_url: extension, price: 10).invalid?, "#{extension} shouldn't be valid"
+    end
+  end
+  
 end
