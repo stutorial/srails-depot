@@ -44,4 +44,15 @@ class ProductTest < ActiveSupport::TestCase
     end
   end
   
+  test "product ttile must be unique" do
+    product = Product.new(
+      title: products(:ruby).title,
+      description: "My description",
+      image_url: "image.jpg",
+      price: 10)
+      
+    assert product.invalid?
+    assert_equal ["has already been taken"], product.errors[:title]
+  end
+  
 end
