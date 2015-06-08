@@ -1,7 +1,20 @@
 source 'https://rubygems.org'
 
+rails_version = ENV["RAILS_VERSION"] || "default"
+
+rails = case rails_version
+
+when "master"
+  {github: "rails/rails"}
+when "default"
+  ">= 3.2.0"
+else
+  "~> #{rails_version}"
+end
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '4.0.0'
+gem "rails", rails
+
 
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
