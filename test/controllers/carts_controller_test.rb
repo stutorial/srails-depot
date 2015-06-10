@@ -40,10 +40,10 @@ class CartsControllerTest < ActionController::TestCase
   end
 
   test "should destroy cart" do
-    assert_difference('Cart.count', -1) do
-      delete :destroy, id: @cart
-    end
+    delete :destroy, id: @cart
+    
+    assert_equal 0, @cart.line_items.count
 
-    assert_redirected_to carts_path
+    assert_redirected_to @cart
   end
 end

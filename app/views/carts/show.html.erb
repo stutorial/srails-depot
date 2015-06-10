@@ -9,4 +9,5 @@
   <% end %>
 </ul>
 
+<%= button_to "Empty list", @cart, method: :delete, data: { confirm: "Are you sure?" } %>
 <%= link_to 'Back to catalog', store_path %>
