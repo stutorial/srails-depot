@@ -10,6 +10,7 @@
       <td><%= item.quantity %>&times;</td>
       <td><%= item.product.title %></td>
       <td class="item_price"><%= number_to_currency(item.total_price) %></td>
+      <td><%= button_to "Delete", item, method: :delete %></td>
     </tr>
   <% end %>
 
@@ -19,5 +20,5 @@
   </tr>
 </table>
 
-<%= button_to "Empty list", @cart, method: :delete, data: { confirm: "Are you sure?" } %>
+<%= button_to "Empty list", @cart, method: :delete %>
 <%= link_to 'Back to catalog', store_path %>
