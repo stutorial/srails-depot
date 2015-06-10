@@ -69,4 +69,33 @@ class ProductTest < ActiveSupport::TestCase
     assert_equal ["has already been taken"], product.errors[:title]
   end
   
+  test "product which is not included in a cart can be deleted" do
+    product = Product.create(
+      title: "My amazing title",
+      description: "My description",
+      image_url: "image.jpg",
+      price: 10)
+    
+    count = Product.count
+    product.destroy
+    
+    assert_not_equal count, Product.count
+  end
+  
+  test "product which is included in a cart can not be deleted" do
+    product = Product.create(
+      title: "My amazing title",
+      description: "My description",
+      image_url: "image.jpg",
+      price: 10)
+    cart = Cart.create
+    LineItem.create(product: product, cart: cart)
+    
+    count = Product.count
+    product.destroy
+    
+    assert_equal count, Product.count
+    assert_equal ["Line Items present"], product.errors[:base]
+  end
+  
 end
