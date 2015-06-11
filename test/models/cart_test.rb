@@ -9,7 +9,7 @@ class CartTest < ActiveSupport::TestCase
   end
   
   test "a product can be added to an empty cart" do
-    line_item = @cart.add_product!(@ruby)
+    line_item = @cart.add_product! @ruby
     
     assert_equal @ruby, line_item.product
     assert_equal @cart, line_item.cart
@@ -17,8 +17,8 @@ class CartTest < ActiveSupport::TestCase
   end
   
   test "a product can be added to a cart" do
-    line_item1 = @cart.add_product!(@ruby)
-    line_item2 = @cart.add_product!(@coffescript)
+    line_item1 = @cart.add_product! @ruby 
+    line_item2 = @cart.add_product! @coffescript
     
     assert_equal @ruby, line_item1.product
     assert_equal @coffescript, line_item2.product
@@ -28,8 +28,8 @@ class CartTest < ActiveSupport::TestCase
   end
   
   test "an empty cart can be empty" do
-    @cart.add_product!(@ruby)
-    @cart.add_product!(@coffescript)
+    @cart.add_product! @ruby
+    @cart.add_product! @coffescript
     
     @cart.remove_all_products
     
@@ -42,7 +42,7 @@ class CartTest < ActiveSupport::TestCase
   end
   
   test "a cart can be deleted although it has line items" do
-    @cart.add_product!(@ruby)
+    @cart.add_product! @ruby
     
     line_item_count = LineItem.count
     cart_count = Cart.count
