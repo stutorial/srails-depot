@@ -1,0 +1,22 @@
+<h2>Your Pragmatic Cart</h2>
+
+<table>
+  <%= render(cart.line_items) %>
+
+  <% if !cart.line_items.empty? %>
+  <tr class="total_line">
+    <td colspan="2">Total</td>
+    <td class="total_cell"><%= number_to_currency(cart.total_price) %></td>
+  </tr>
+  <% end %>
+</table>
+
+<% if !cart.line_items.empty? %>
+  <%= button_to "Empty list", cart, method: :delete %>
+  <%= link_to 'Back to catalog', store_path %>
+<% end %>
+
+<% if cart.line_items.empty? %>
+  <p>You do not have any products :(</p>
+  <%= link_to 'Go to the store to buy something', store_path %>
+<% end %>
