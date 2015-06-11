@@ -43,7 +43,7 @@ class CartsController < ApplicationController
   def update
     respond_to do |format|
       if @cart.update(cart_params)
-        format.html { redirect_to @cart, notice: 'Cart was successfully updated.' }
+        format.html { redirect_to @cart }
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
@@ -58,7 +58,7 @@ class CartsController < ApplicationController
     @cart.remove_all_products
 
     respond_to do |format|
-      format.html { redirect_to @cart, notice: "Cart was successfully emptied" }
+      format.html { redirect_to store_url }
       format.json { head :no_content }
     end
   end
