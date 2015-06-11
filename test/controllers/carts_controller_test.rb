@@ -42,6 +42,6 @@ class CartsControllerTest < ActionController::TestCase
   test "should destroy cart" do
     delete :destroy, id: @cart
     assert_equal 0, @cart.line_items.count
-    assert_redirected_to @cart
+    assert_redirected_to store_url
   end
 end
