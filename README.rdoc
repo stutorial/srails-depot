@@ -1,1 +1,2 @@
 == Ruby on Rails Example
+https://travis-ci.org/stutorial/srails-depot.svg?branch=master
