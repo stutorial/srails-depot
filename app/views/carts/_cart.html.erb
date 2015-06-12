@@ -12,7 +12,7 @@
 </table>
 
 <% unless cart.line_items.empty? %>
-  <%= button_to "Empty list", cart, method: :delete %>
+  <%= button_to "Empty list", cart, method: :delete, remote: true %>
 <% end %>
 
 <% if cart.line_items.empty? %>
