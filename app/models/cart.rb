@@ -21,6 +21,7 @@ class Cart < ActiveRecord::Base
     end
     
     def remove_all_products
-       line_items.each { |line_item| line_item.destroy } 
+       line_items.each { |line_item| line_item.destroy }
+       line_items.clear
     end
 end
