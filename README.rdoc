@@ -1,2 +1,2 @@
 == Ruby on Rails Example
-https://travis-ci.org/stutorial/srails-depot.svg?branch=master
+[![Build Status](https://travis-ci.org/stutorial/srails-depot.svg?branch=master)](https://travis-ci.org/stutorial/srails-depot)
