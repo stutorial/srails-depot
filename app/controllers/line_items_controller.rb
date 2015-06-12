@@ -1,6 +1,6 @@
 class LineItemsController < ApplicationController
   include CurrentCart
-  before_action :set_cart, only: [:create, :destroy]
+  before_action :set_cart, only: [:create, :update, :destroy]
   before_action :set_line_item, only: [:show, :edit, :update, :destroy]
   rescue_from ActiveRecord::RecordNotFound, with: :invalid_line_item
 
@@ -50,6 +50,7 @@ class LineItemsController < ApplicationController
     respond_to do |format|
       if @line_item.save
         format.html { redirect_to store_url }
+        format.js
         format.json { head :no_content }
       else
         format.html { render action: 'edit' }
