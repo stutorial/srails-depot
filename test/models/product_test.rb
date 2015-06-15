@@ -1,101 +1,119 @@
 require 'test_helper'
 
 class ProductTest < ActiveSupport::TestCase
+  
+  setup do
+    @valid_title = "My amazing title"
+    @valid_description = "My amazing description"
+    @valid_image_url = "my_amazing_url.jpg"
+    @valid_price = 10
+    @ruby = products(:ruby)
+    @empty_cart = carts(:cart_with_no_line_items)
+  end
 
-  test "product with valid attributtes can be created" do
-    product = Product.new(title: "My amazing title", description: "My description", image_url: "image_url.jpg", price: 10)
+  test "a product with valid attributtes can be created" do
+    product = Product.new(title: @valid_title, description: @valid_description, image_url: @valid_image_url, price: @valid_price)
+    
     assert product.valid?
   end
   
-  test "product attributtes must not be empty" do
-    product = Product.new
+  test "a product must have a title" do
+    product = Product.new(title: nil, description: @valid_description, image_url: @valid_image_url, price: @valid_price)
+    
     assert product.invalid?
-    assert product.errors[:title].any?
-    assert product.errors[:description].any?
-    assert product.errors[:image_url].any?
-    assert product.errors[:price].any?
-  end  
+    assert product.errors[:title].include?("can't be blank"), "title is blank"
+  end
   
-  test "product price must be positive" do
-    product = Product.new(title: "My amazing title", description: "My description", image_url: "image_url.jpg", price: -1)
-    assert product.invalid?
-    assert_equal ["must be greater than or equal to 0.01"], product.errors[:price]
+  test "a product must have a description" do
+    product = Product.new(title: @valid_title, description: nil, image_url: @valid_image_url, price: @valid_price)
     
-    product.price = 0
     assert product.invalid?
-    assert_equal ["must be greater than or equal to 0.01"], product.errors[:price]
+    assert product.errors[:description].include?("can't be blank"), "description is blank"
+  end
+  
+  test "a product must have an image url" do
+    product = Product.new(title: @valid_title, description: @valid_description, image_url: nil, price: @valid_price)
     
-    product.price = 0.001
     assert product.invalid?
-    assert_equal ["must be greater than or equal to 0.01"], product.errors[:price]
+    assert product.errors[:image_url].include?("can't be blank"), "image_url is blank"
+  end
+  
+  test "a product must have a price" do
+    product = Product.new(title: @valid_title, description: @valid_description, image_url: @valid_image_url, price: nil)
     
-    product.price = 1
+    assert product.invalid?
+    assert product.errors[:price].include?("can't be blank"), "price is blank"
+  end
+  
+  test "a product price can not be negative" do
+    product = Product.new(title: @valid_title, description: @valid_description, image_url: @valid_image_url, price: -1)
+    
+    assert product.invalid?
+    assert product.errors[:price].include?("must be greater than or equal to 0.01"), "price is negative"
+  end
+  
+  test "a produce price can not be zero" do
+    product = Product.new(title: @valid_title, description: @valid_description, image_url: @valid_image_url, price: 0)
+    
+    assert product.invalid?
+    assert product.errors[:price].include?("must be greater than or equal to 0.01"), "price is zero"
+  end
+  
+  test "a product price can be positive" do
+    product = Product.new(title: @valid_title, description: @valid_description, image_url: @valid_image_url, price: 1)
+
     assert product.valid?
   end
   
-  test "product image url must end with valid extension" do
+  test "a product image url must end with valid extension" do
     ok = %w{ fred.gif fred.jpg fred.png FRED.JPG FRED.Jpg http://a.b.c/x/y/z/fred.gif }
     bad = %w{ fred.doc fred.gif/more fred.gif.more }
+    
     ok.each do |extension|
-      assert Product.new(title: "My amazing title", description: "My description", image_url: extension, price: 10).valid?, "#{extension} should be valid"
+      assert Product.new(
+        title: @valid_title,
+        description: @valid_description,
+        image_url: extension,
+        price: @valid_price).valid?, "#{extension} should be valid"
     end
+    
     bad.each do |extension|
-      assert Product.new(title: "My amazing title", description: "My description", image_url: extension, price: 10).invalid?, "#{extension} shouldn't be valid"
+      assert Product.new(
+        title: @valid_title,
+        description: @valid_description,
+        image_url: extension,
+        price: @valid_price).invalid?, "#{extension} shouldn't be valid"
     end
   end
   
-  test "product ttile must be at least ten characters long" do
-    product = Product.new(
-      title: "title",
-      description: "My description",
-      image_url: "image.jpg",
-      price: 10)
+  test "a product title must be at least ten characters long" do
+    product = Product.new(title: "title", description: @valid_description, image_url: @valid_image_url, price: @valid_price)
       
     assert product.invalid?
-    assert_equal ["must have at least 10 characters"], product.errors[:title]
-    
-    product.title = "Ten characters long"
-    assert product.valid?
+    assert product.errors[:title].include?("must have at least 10 characters"), "title is not at least ten characters long"
   end
   
-  test "product ttile must be unique" do
-    product = Product.new(
-      title: products(:ruby).title,
-      description: "My description",
-      image_url: "image.jpg",
-      price: 10)
+  test "a product title must be unique" do
+    product = Product.new(title: @ruby.title, description: @valid_description, image_url: @valid_image_url, price: @valid_price)
       
     assert product.invalid?
-    assert_equal ["has already been taken"], product.errors[:title]
+    assert product.errors[:title].include?("has already been taken"), "title is not unique"
   end
   
-  test "product which is not included in a cart can be deleted" do
-    product = Product.create(
-      title: "My amazing title",
-      description: "My description",
-      image_url: "image.jpg",
-      price: 10)
-    
-    count = Product.count
-    product.destroy
-    
-    assert_not_equal count, Product.count
+  test "a product which is not included in a cart can be deleted" do
+    assert_difference("Product.count", -1) do
+      @ruby.destroy
+    end
   end
   
-  test "product which is included in a cart can not be deleted" do
-    product = Product.create(
-      title: "My amazing title",
-      description: "My description",
-      image_url: "image.jpg",
-      price: 10)
-    cart = Cart.create
-    LineItem.create(product: product, cart: cart)
+  test "a product which is included in a cart can not be deleted" do
+    @empty_cart.add_product_and_save @ruby
     
-    count = Product.count
-    product.destroy
+    assert_no_difference("Product.count") do
+      @ruby.destroy
+    end
     
-    assert_equal count, Product.count
-    assert_equal ["Line Items present"], product.errors[:base]
+    assert @ruby.errors[:base].include?("Line Items present"), "product is included in a cart"
   end
   
 end

@@ -4,6 +4,7 @@ class StoreControllerTest < ActionController::TestCase
   
   test "should get index" do
     get :index
+    
     assert_response :success
     assert_select '#main .entry', 2
     assert_select 'h3', 'Programming Ruby 1.9'
