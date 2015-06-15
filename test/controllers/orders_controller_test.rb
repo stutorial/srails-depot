@@ -2,7 +2,8 @@ require 'test_helper'
 
 class OrdersControllerTest < ActionController::TestCase
   setup do
-    @order = orders(:one)
+    @order = orders(:order_with_no_line_items)
+    @one = line_items(:one)
   end
 
   test "should get index" do
@@ -20,11 +21,8 @@ class OrdersControllerTest < ActionController::TestCase
   end
   
   test "should get new" do
-    item = LineItem.new
-    item.build_cart
-    item.product = products(:ruby)
-    item.save!
-    session[:cart_id] = item.card.id
+    session[:cart_id] = @one.cart_id
+
     get :new
     
     assert_response :success
