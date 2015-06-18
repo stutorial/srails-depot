@@ -3,6 +3,7 @@ require 'test_helper'
 class ProductsControllerTest < ActionController::TestCase
   setup do
     @ruby = products(:ruby)
+    @product_not_included_in_cart = products(:product_not_included_in_cart)
     @valid_title = "My amazing title"
   end
 
@@ -47,7 +48,7 @@ class ProductsControllerTest < ActionController::TestCase
 
   test "should destroy product" do
     assert_difference('Product.count', -1) do
-      delete :destroy, id: @ruby
+      delete :destroy, id: @product_not_included_in_cart
     end
 
     assert_redirected_to products_path

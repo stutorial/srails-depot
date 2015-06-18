@@ -19,3 +19,9 @@ coffescript:
     while writing clearer, cleaner, and safer code.
   image_url: cs.jpg    
   price: 36.00
+  
+product_not_included_in_cart:
+  title: My product not included
+  description: My description not included
+  image_url: not_included.jpg    
+  price: 12.00

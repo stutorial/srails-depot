@@ -1,0 +1,7 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+order_with_no_line_items:
+  name: My amazing name
+  address: My amazing address
+  email: my_amazing_email@email.com
+  pay_type: Check

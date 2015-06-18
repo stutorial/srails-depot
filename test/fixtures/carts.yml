@@ -6,3 +6,5 @@
 #
 
 cart_with_no_line_items: {}
+
+cart_with_line_items: {}

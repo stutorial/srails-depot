@@ -8,6 +8,7 @@ class ProductTest < ActiveSupport::TestCase
     @valid_image_url = "my_amazing_url.jpg"
     @valid_price = 10
     @ruby = products(:ruby)
+    @product_not_included_in_cart = products(:product_not_included_in_cart)
     @empty_cart = carts(:cart_with_no_line_items)
   end
 
@@ -102,7 +103,7 @@ class ProductTest < ActiveSupport::TestCase
   
   test "a product which is not included in a cart can be deleted" do
     assert_difference("Product.count", -1) do
-      @ruby.destroy
+      @product_not_included_in_cart.destroy
     end
   end
   
