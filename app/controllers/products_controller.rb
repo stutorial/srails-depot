@@ -68,6 +68,9 @@ class ProductsController < ApplicationController
     if @lastest_order
       respond_to do |format|
         format.atom
+        format.json { render json: @product.to_json(include: :orders) }
+        format.xml { render xml: @product.to_xml(include: :orders) }
+        format.html { @current_product = @product }
       end
     end
   end
