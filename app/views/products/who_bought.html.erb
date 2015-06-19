@@ -1,0 +1,13 @@
+<h1><%= @product.title %></h1>
+<ul>
+    <% @product.orders.each do |order| %>
+        <li><%= order.id %></li>
+        <ul>
+            <li><%= order.name %></li>
+            <li><%= order.address %></li>
+            <li><%= order.pay_type %></li>
+            <li><%= order.created_at %></li>
+            <li><%= order.updated_at %></li>    
+        </ul>
+    <% end %>
+</ul>

@@ -1,5 +1,5 @@
 class ProductsController < ApplicationController
-  before_action :set_product, only: [:show, :edit, :update, :destroy]
+  before_action :set_product, only: [:show, :edit, :update, :destroy, :who_bought]
   rescue_from ActiveRecord::RecordNotFound, with: :invalid_product
 
   # GET /products
@@ -59,6 +59,19 @@ class ProductsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to products_url }
       format.json { head :no_content }
+    end
+  end
+  
+  # GET /products/who_bought/1.atom
+  def who_bought
+    @lastest_order = @product.orders.order(:updated_at).last
+    if @lastest_order
+      respond_to do |format|
+        format.atom
+        format.json { render json: @product.to_json(include: :orders) }
+        format.xml { render xml: @product.to_xml(include: :orders) }
+        format.html { @current_product = @product }
+      end
     end
   end
 
